@@ -1,0 +1,29 @@
+{
+  "name": "cypress-promise",
+  "version": "1.0.0",
+  "description": "Convert a Cypress chain into a promise for use with async/await",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NicholasBoll/cypress-promise.git"
+  },
+  "keywords": [
+    "cypress",
+    "promise",
+    "async",
+    "await"
+  ],
+  "author": "Nicholas Boll",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NicholasBoll/cypress-promise/issues"
+  },
+  "homepage": "https://github.com/NicholasBoll/cypress-promise#readme",
+  "devDependencies": {
+    "babel-polyfill": "^6.26.0",
+    "cypress": "^2.1.0"
+  }
+}
