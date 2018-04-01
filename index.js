@@ -6,11 +6,11 @@ function promisify(chain) {
   // Alias the chain so we can access it later
   chain.as(id, { log: false })
 
-  return new Cypress.Promise(function (resolve, reject) {
+  return new Cypress.Promise((resolve, reject) => {
     // We must subscribe to failures and bail. Without this, the Cypress runner would never stop
     Cypress.on('fail', rejectPromise)
 
-    // unsubscribe from test failure on both resolution and failure. This cleanup is essential
+    // unsubscribe from test failure on both success and failure. This cleanup is essential
     function resolvePromise(value) {
       resolve(value)
       Cypress.off('fail', rejectPromise)

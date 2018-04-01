@@ -1,22 +1,34 @@
 # Cypress Promise
 
-This package allows a Cypress chain to be converted into a real promise which is to use `async`/`await`. This package allows the following code to work:
+This library allows a Cypress chain to be converted into a real promise which is required to use `async`/`await`.
 
 ```ts
 import promisify from 'cypress-promise'
 
 it('should run tests with async/await', async () => {
   const foo = await promisify(cy.wrap('foo'))
-  const bar = await cy.wrap('bar').promisify() // if `import 'cypress-promise/register` is used in support file
+  const bar = await promisify(cy.wrap('bar'))
 
   expect(foo).to.equal('foo')
   expect(bar).to.equal('bar')
 })
 ```
 
-Without this package and the `.promisify()`, second expectation would fail with `undefined` instead of `'bar'`
+An alternative it to use the 'register' polyfill to add `promisify` method to all Cypress chains. This requires `import 'cypress-promise/register'` in your `cypress/support/index` file:
 
-## Why?
+```ts
+it('should run tests with async/await', async () => {
+  const foo = await cy.wrap('foo').promisify()
+  const bar = await cy.wrap('bar').promisify()
+
+  expect(foo).to.equal('foo')
+  expect(bar).to.equal('bar')
+}
+```
+
+Without this library and the `promisify` function/method, the expectation of `bar` would fail with `expected undefined to equal 'bar'`
+
+## Why use this library?
 The question about how to use async/await in Cypress test comes up from time to time in the gitter chat as well as in [GitHub Issue #1417](https://github.com/cypress-io/cypress/issues/1417). Sometimes you needs a value out of a chain and using `.then` just increases the nesting level, decreasing readability:
 
 ```ts
@@ -40,7 +52,7 @@ cy.get('.someOtherSelector')
   .should('equal', text)
 ```
 
-Since [Commands are not Promises](https://docs.cypress.io/guides/core-concepts/introduction-to-cypress.html#Commands-Are-Not-Promises), that code won't work. This library adds a `.promisify()` that will end a chain and return a promise instead:
+Since [Commands are not Promises](https://docs.cypress.io/guides/core-concepts/introduction-to-cypress.html#Commands-Are-Not-Promises), that code won't work. This library uses aliases and Cypress life-cycle events to force Cypress to play nicely with Promises:
 
 ```ts
 import promisify from 'cypress-promise'
@@ -57,7 +69,7 @@ cy.get('.someOtherSelector')
 ```
 
 ## Best Practices
-Cypress chains are powerful and declarative. I've used the compositional properties of chains to define my own commands that read like a list of steps without much extra syntax. I suggest using chains as much as possible. Most Cypress commands work on elements and `await`ing them means all you can really do is `cy.wrap` them again. I only use `await` for non-element subjects that need to be used as inputs for other commands.
+Cypress chains are powerful and declarative. [Custom Commands](https://medium.com/@NicholasBoll/cypress-io-scaling-e2e-testing-with-custom-commands-6b72b902aab) can be used to chain functions together that read like a series of steps without much extra syntax. Most Cypress commands work on elements and `await`ing them means all you can really do is `cy.wrap` them again. Only use `await` for non-element subjects that need to be used as inputs for other commands.
 
 ```ts
 // very bad
@@ -83,16 +95,17 @@ cy.get('.someInput').type(text)
 ```
 
 ## Caveats
-* `promisify()` is an extra 11 keystrokes
-* `promisify()` will end the chain and return a Promise instead of a Chain, meaning you cannot chain further off of this method. When you think about it, this makes perfect sense, but could trip people up.
-* You can't run Cypress commands inside a Promise's `.then` or `.catch`. Cypress will throw an error. I'm not sure it would make sense regardless.
+* Cypress throws a warning about using Promises - on every use.
+* `promisify()` is extra syntax - it can be easy to forget to call it.
+* `.promisify()` will end the chain and return a Promise instead of a Chain, meaning you cannot chain further off of this method. When you think about it, this makes perfect sense, but could trip people up.
+* You can't run Cypress commands inside a Promise's `.then` or `.catch`. Cypress will throw an error. I'm not sure it would make sense even if Cypress allowed it.
 
 ## Installation
 ```
 npm install cypress-promise -D
 ```
 
-If you get errors like "regeneratorRuntime is not defined.", you'll have to install `babel-polyfill` and add `import 'babel-polyfill'` to your `cypress/support/index`
+If you get errors like "regeneratorRuntime is not defined.", you'll have to install `babel-polyfill` and add `import 'babel-polyfill'` to your `cypress/support/index`.
 
 If you want to use the `cy.promisify()`, you'll have to add the following to your `cypress/support/index` file:
 
