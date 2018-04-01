@@ -16,6 +16,12 @@
     "async",
     "await"
   ],
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "register.js",
+    "register.d.ts"
+  ],
   "author": "Nicholas Boll",
   "license": "MIT",
   "bugs": {
