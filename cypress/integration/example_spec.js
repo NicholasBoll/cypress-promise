@@ -55,6 +55,23 @@ describe('cy.promisify()', () => {
     expect(bar).to.equal('bar')
   })
 
+  it('should handle multiple disconnected .then calls and resolve everything correctly', async () => {
+    const fooPromise = cy.wrap('foo').promisify()
+    const bar = await cy.wrap('bar').promisify()
+
+    fooPromise.then(foo => {
+      expect(foo).to.equal('foo')
+    })
+
+    fooPromise.then(foo => {
+      expect(foo).to.equal('foo')
+    })
+
+    const foo = await fooPromise
+    expect(foo).to.equal('foo')
+    expect(bar).to.equal('bar')
+  })
+
   it('should fail and bubble the error to mocha to stop the runner', async () => {
     const body = await cy.get('body').promisify()
     expect(body).to.be.visible
