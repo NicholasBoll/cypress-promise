@@ -1,6 +1,6 @@
 # Cypress Promise
 
-This library allows a Cypress chain to be converted into a real promise which is required to use `async`/`await`.
+This library promises to convert a Cypress chain into a real promise, which is required to use `async`/`await` in a Cypress test.
 
 ```ts
 import promisify from 'cypress-promise'
