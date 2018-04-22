@@ -1,6 +1,6 @@
 # Cypress Promise
 
-This library promises to convert a Cypress chain into a real promise, which is required to use `async`/`await` in a Cypress test.
+This library promises to convert a Cypress chain into a real promise, which is required to use `async`/`await` in a Cypress test. This library is experimental and doesn't work inside a `before` or `beforeEach` block.
 
 ```ts
 import promisify from 'cypress-promise'
@@ -95,6 +95,7 @@ cy.get('.someInput').type(text)
 ```
 
 ## Caveats
+* `.promisify()` doesn't currently work inside `before` or `beforeEach` blocks. This is tracked by #1
 * Cypress throws a warning about using Promises - on every use.
 * `promisify()` is extra syntax - it can be easy to forget to call it.
 * `.promisify()` will end the chain and return a Promise instead of a Chain, meaning you cannot chain further off of this method. When you think about it, this makes perfect sense, but could trip people up.
