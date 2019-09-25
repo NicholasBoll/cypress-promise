@@ -30,6 +30,6 @@
   "homepage": "https://github.com/NicholasBoll/cypress-promise#readme",
   "devDependencies": {
     "babel-polyfill": "^6.26.0",
-    "cypress": "^2.1.0"
+    "cypress": "^3.4.1"
   }
 }
