@@ -27,7 +27,10 @@ describe('promisify()', () => {
     const body = await promisify(cy.get('body'))
     expect(body).to.be.visible
 
-    await promisify(cy.get('notfound', { timeout: 1000 }))
+    await promisify(cy.get('notfound', { timeout: 1000 })).catch(err => {
+      expect(err.message).to.contain(`Expected to find element: 'notfound', but never found it`)
+      return true
+    })
   })
 })
 
@@ -77,6 +80,9 @@ describe('cy.promisify()', () => {
     expect(body).to.be.visible
 
     await cy.get('notfound', { timeout: 1000 })
-      .promisify()
+      .promisify().catch(err => {
+        expect(err.message).to.contain(`Expected to find element: 'notfound', but never found it`)
+        return true
+      })
   })
 })
