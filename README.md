@@ -29,7 +29,7 @@ it('should run tests with async/await', async () => {
 Without this library and the `promisify` function/method, the expectation of `bar` would fail with `expected undefined to equal 'bar'`
 
 ## Why use this library?
-The question about how to use async/await in Cypress test comes up from time to time in the gitter chat as well as in [GitHub Issue #1417](https://github.com/cypress-io/cypress/issues/1417). Sometimes you needs a value out of a chain and using `.then` just increases the nesting level, decreasing readability:
+The question about how to use async/await in Cypress test comes up from time to time in the gitter chat as well as in [GitHub Issue #1417](https://github.com/cypress-io/cypress/issues/1417). Sometimes you need a value out of a chain and using `.then` just increases the nesting level, decreasing readability:
 
 ```ts
 cy.get('.mySelector')
@@ -104,6 +104,10 @@ cy.get('.someInput').type(text)
 ## Installation
 ```
 npm install cypress-promise -D
+```
+or 
+```
+yarn add cypress-promise -D
 ```
 
 If you get errors like "regeneratorRuntime is not defined.", you'll have to install `babel-polyfill` and add `import 'babel-polyfill'` to your `cypress/support/index`.
